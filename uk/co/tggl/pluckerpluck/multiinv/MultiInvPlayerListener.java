@@ -166,11 +166,12 @@ public class MultiInvPlayerListener extends PlayerListener {
     	}
     }
 
+    /*
     @Override
     public void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
         Player player = event.getPlayer();
         MultiInvPlayerData.storeCurrentInventory(player, player.getWorld().getName());
-    }
+    }*/
 
     @Override
     public void onPlayerRespawn(PlayerRespawnEvent event) {
