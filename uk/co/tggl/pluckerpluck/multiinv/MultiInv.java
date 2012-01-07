@@ -65,17 +65,13 @@ public class MultiInv extends JavaPlugin {
         fileReader.loadConfig();
         MultiInvPlayerData.storeConfig(fileReader.config);
 
-        
-        if (getServer().getOnlinePlayers().length > 0) {
-            Boolean localShares = fileReader.parseShares();
-            if (localShares) {
-                log.info("[" + pluginName + "] Shared worlds loaded with no errors");
-                this.shares = 1;
-            }
-            this.shares = 2;
-        }else{
-            fileReader.loadFileFromJar("shares.yml");
+
+        Boolean localShares = fileReader.parseShares();
+        if (localShares) {
+        	log.info("[" + pluginName + "] Shared worlds loaded with no errors");
+        	this.shares = 1;
         }
+        this.shares = 2;
 
         log.info("[" + pluginName + "] version " + pdfFile.getVersion() + " is enabled!");
 

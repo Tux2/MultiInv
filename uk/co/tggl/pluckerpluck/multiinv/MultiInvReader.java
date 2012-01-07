@@ -62,6 +62,7 @@ public class MultiInvReader {
                     }  
                 }else if (stringList != null) {
                     for (String group : stringList){
+                    	//System.out.println("[MultiInv] Adding share: " +group + ", " +key);
                         MultiInv.sharesMap.put(group, key);
                     }
                 }

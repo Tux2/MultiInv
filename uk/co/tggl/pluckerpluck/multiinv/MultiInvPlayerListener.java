@@ -134,6 +134,7 @@ public class MultiInvPlayerListener extends PlayerListener {
     	String groupTo = event.getPlayer().getWorld().getName();
     	Player player = event.getPlayer();
     	String groupFrom = event.getFrom().getName();
+    	System.out.println("Player teleported from world: " + groupFrom + " to: " + groupTo);
     	if (!(groupTo.equals(groupFrom))) {
     		plugin.debugger.debugEvent(MultiInvEvent.WORLD_CHANGE,
     				new String[]{player.getName(), groupFrom, groupTo});
