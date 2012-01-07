@@ -240,7 +240,7 @@ public class MultiInvInventory implements Serializable {
             if(enchantments.size() > 0) {
             	Set<Enchantment> setenchantments = enchantments.keySet();
             	for(Enchantment tench : setenchantments) {
-            		stack.addEnchantment(tench, enchantments.get(tench).intValue());
+            		stack.addUnsafeEnchantment(tench, enchantments.get(tench).intValue());
             	}
             }
             items[i] = stack;

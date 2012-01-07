@@ -54,7 +54,7 @@ public class MultiInvPlayerListener extends PlayerListener {
         MultiInvPlayerData.storeCurrentInventory(player, player.getWorld().getName());
     }*/
 
-    @Override
+    /*@Override
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (!event.isCancelled()) {
             String groupTo = event.getTo().getWorld().getName();
@@ -127,6 +127,42 @@ public class MultiInvPlayerListener extends PlayerListener {
                 }
             }
         }
+    }*/
+    
+    @Override
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event)  {
+    	String groupTo = event.getPlayer().getWorld().getName();
+    	Player player = event.getPlayer();
+    	String groupFrom = event.getFrom().getName();
+    	if (!(groupTo.equals(groupFrom))) {
+    		plugin.debugger.debugEvent(MultiInvEvent.WORLD_CHANGE,
+    				new String[]{player.getName(), groupFrom, groupTo});
+    	}
+    	if (MultiInv.sharesMap.containsKey(groupTo)) {
+    		groupTo = MultiInv.sharesMap.get(groupTo);
+    	}
+    	if (MultiInv.sharesMap.containsKey(groupFrom)) {
+    		groupFrom = MultiInv.sharesMap.get(groupFrom);
+    	}
+    	if (!(groupTo.equals(groupFrom))) {
+    		boolean isInIgnoreList = MultiInv.ignoreList.contains(player.getName().toLowerCase());
+    		if (isInIgnoreList ^ isIgnoreNonInverted) {
+    			MultiInvPlayerData.storeCurrentInventory(player, groupFrom);
+
+    			// If using spout, close the inventory to stop cheating
+    			if(plugin.hasspout) {
+    				SpoutPlayer spoutPlayer = SpoutManager.getPlayer(event.getPlayer());
+    				spoutPlayer.closeActiveWindow();
+    			}
+
+    			//set GameMode and load inventory
+
+    			if(MultiInvPlayerData.restoreGameModes) {
+    				setGameMode(player, groupTo);
+    			}
+    			MultiInvPlayerData.loadWorldInventory(player, groupTo, true);
+    		}
+    	}
     }
 
     @Override
