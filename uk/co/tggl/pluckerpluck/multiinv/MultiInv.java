@@ -96,7 +96,9 @@ public class MultiInv extends JavaPlugin {
         //pm.registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Monitor, this);
         //pm.registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Priority.Monitor, this);
         //pm.registerEvent(Event.Type.PLAYER_PORTAL, playerListener, Priority.Highest, this);
-        pm.registerEvent(Event.Type.PLAYER_GAME_MODE_CHANGE, playerListener, Priority.Highest, this);
+        if(MultiInvPlayerData.restoreGameModes) {
+            pm.registerEvent(Event.Type.PLAYER_GAME_MODE_CHANGE, playerListener, Priority.Highest, this);
+        }
     	pm.registerEvent(Event.Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Normal, this);
 
         //Permissions setup
