@@ -140,8 +140,10 @@ public class MultiInvPlayerData {
             //plugin.debugger.debugEvent(MultiInvEvent.INVENTORY_LOAD_NEW, new String[]{player.getName()});
         }
         if (isExpSplit) {
-            int exp = playerFile.getInt("totalExp", 0);
-            player.setTotalExperience(exp);
+            int exp = playerFile.getInt("expLevel", 0);
+            double expgain = playerFile.getDouble("otherExp", 0);
+            player.setLevel(exp);
+            player.setExp((float)expgain);
         }
         playerFile.save();
     }
@@ -160,7 +162,10 @@ public class MultiInvPlayerData {
             playerFile.setProperty("exhaustion", player.getExhaustion());
         }
         if (isExpSplit) {
-            playerFile.setProperty("totalExp", player.getTotalExperience());
+            int exp = playerFile.getInt("expLevel", 0);
+            double expgain = playerFile.getInt("otherExp", 0);
+            playerFile.setProperty("expLevel", player.getLevel());
+            playerFile.setProperty("otherExp", player.getExp());
         }
 
         playerFile.save();
@@ -178,7 +183,8 @@ public class MultiInvPlayerData {
         data.put("exhaustion", playerFile.getString("exhaustion", "0"));
 
         //Store exp
-        data.put("totalExp", playerFile.getString("totalExp", "0"));
+        data.put("expLevel", playerFile.getString("expLevel", "0"));
+        data.put("otherExp", playerFile.getString("otherExp", "0"));
 
         //Load info into Player
         if (player != null) {
@@ -200,8 +206,10 @@ public class MultiInvPlayerData {
                 player.setFoodLevel(hunger);
             }
             if (isExpSplit) {
-                int totalExp = Integer.parseInt(data.get("totalExp"));
-                player.setTotalExperience(totalExp);
+                int level = Integer.parseInt(data.get("expLevel"));
+                double exp = Double.parseDouble(data.get("otherExp"));
+                player.setLevel(level);
+                player.setExp((float)exp);
             }
         }
         return data;
