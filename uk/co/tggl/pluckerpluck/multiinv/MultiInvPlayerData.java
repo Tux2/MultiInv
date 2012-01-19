@@ -139,6 +139,10 @@ public class MultiInvPlayerData {
             // TODO: Add Debugging
             //plugin.debugger.debugEvent(MultiInvEvent.INVENTORY_LOAD_NEW, new String[]{player.getName()});
         }
+        if (isExpSplit) {
+            int exp = playerFile.getInt("totalExp", 0);
+            player.setTotalExperience(exp);
+        }
         playerFile.save();
     }
 

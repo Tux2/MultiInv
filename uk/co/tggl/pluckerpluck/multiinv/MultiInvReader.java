@@ -83,8 +83,8 @@ public class MultiInvReader {
         config.put("isHungerSplit", cfg.getBoolean("isHungerSplit", true));
         config.put("invertList", cfg.getBoolean("invertList", false));
         config.put("restoreGameModes", cfg.getBoolean("restoreGameModes", true));
-        //config.put("isExpSplit", cfg.getBoolean("isExpSplit", false));
-        config.put("isExpSplit", false);
+        config.put("isExpSplit", cfg.getBoolean("isExpSplit", false));
+        //config.put("isExpSplit", false);
         List<String> ignoreList = cfg.getStringList("ignore", null);
         for (String name : ignoreList) {
             MultiInv.ignoreList.add(name.toLowerCase());

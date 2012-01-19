@@ -5,8 +5,7 @@ isHealthSplit: true
 isHungerSplit: true
 
 # Do you want exp split across different world groups
-# *Currently doesn't work due to Bukkit exp bugs*
-isExpSplit: false
+isExpSplit: true
 
 # Do you want to allow this plugin to control which worlds are creative/survival
 worldTypes: true
