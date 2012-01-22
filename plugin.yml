@@ -1,6 +1,6 @@
 name: MultiInv
 main: uk.co.tggl.pluckerpluck.multiinv.MultiInv
-version: 2.4.9
+version: 2.5.0
 website: http://www.tggl.co.uk
 author: Pluckerpluck
 softdepend: [Spout]
@@ -22,6 +22,7 @@ permissions:
       MultiInv.admin.delete: true
       MultiInv.admin.debug: true
       MultiInv.admin.shares: true
+      MultiInv.admin.import: true
   MultiInv.mod.ignore:
     description: Permission to add user to global ignore list
     default: op
@@ -33,6 +34,9 @@ permissions:
     default: op
   MultiInv.admin.shares:
     description: Permission to share and unshare world inventories
+    default: op
+  MultiInv.admin.import:
+    description: Permission to import world inventories from WorldInventories
     default: op
 commands:
   multiinv:
@@ -46,3 +50,4 @@ commands:
            /<command> unignore <player> - remove user from shared inventory ignore list
            /<command> addShare <minorWorld> <majorWorld> - share inventory from majorWorld with minorWorld
            /<command> removeShare <minorWorld> - remove minorWorld from shared inventories
+           /<command> import - imports world inventories from WorldInventories

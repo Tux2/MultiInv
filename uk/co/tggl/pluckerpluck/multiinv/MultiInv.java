@@ -149,6 +149,7 @@ public class MultiInv extends JavaPlugin {
             commandPermissions.put("addshare", "MultiInv.admin.shares");
             commandPermissions.put("removeshare", "MultiInv.admin.shares");
             commandPermissions.put("debug", "MultiInv.admin.debug");
+            commandPermissions.put("import", "MultiInv.admin.import");
 
             if (commandPermissions.containsKey(split[0])) {
                 String permission = commandPermissions.get(split[0].toLowerCase());

@@ -1,9 +1,18 @@
 package uk.co.tggl.pluckerpluck.multiinv;
 
+import me.drayshak.WorldInventories.WIPlayerInventory;
+import me.drayshak.WorldInventories.WIPlayerStats;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.util.config.Configuration;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.ObjectInputStream;
 
 public class MultiInvCommands {
 
@@ -73,11 +82,104 @@ public class MultiInvCommands {
             }
             sender.sendMessage("/MultiInv removeShare <minorWorld>");
             return 2;
+        } else if (Str.equalsIgnoreCase("import")) {
+            importInventories();
+            sender.sendMessage("Player file import complete!");
+            return 0;
         }
         return 3;
     }
 
-    /* Below here are the actual commands called that perform the required action */
+    private void importInventories() {
+        System.out.println("getting World Inventories Directory");
+    	String worldinventoriesdir = plugin.getDataFolder().getParentFile().getAbsolutePath() + File.separator + "WorldInventories"  + File.separator;
+    	File worldinvdir = new File(worldinventoriesdir);
+    	if(worldinvdir.exists()) {
+        	File[] thedirs = worldinvdir.listFiles();
+        	for(File fdir : thedirs) {
+        		if(fdir.isDirectory()) {
+                    System.out.println("In group directory " + fdir.getName());
+        			File[] playerfiles = fdir.listFiles();
+        			for(File pfile : playerfiles) {
+        				if(pfile.getName().endsWith(".inventory")) {
+                            System.out.println("Importing player " + pfile.getName());
+        					try
+        			        {
+        			            FileInputStream fIS = new FileInputStream(pfile);
+        			            ObjectInputStream obIn = new ObjectInputStream(fIS);
+        			            WIPlayerInventory playerInventory = (WIPlayerInventory) obIn.readObject();
+        			            obIn.close();
+        			            fIS.close();
+        			            
+        			            //Now that we have the file in, let's convert it.
+        			            String playername = pfile.getName().substring(0, pfile.getName().lastIndexOf("."));
+        			            File dataFile = plugin.getDataFolder();
+        			            File file = new File(dataFile, "Worlds" + File.separator + fdir.getName() + File.separator + playername + ".yml");
+        			            Configuration playerFile = new Configuration(file);
+        			            playerFile.load();
+        			            String inventoryName = "survival";
+        			            if (MultiInv.currentInventories.containsKey(playername)) {
+        			                inventoryName = MultiInv.currentInventories.get(playername)[0];
+        			            }
+        			            MultiInvInventory inventory = new MultiInvInventory((PlayerInventory)null, inventoryName, MultiInv.pluginName);
+        			            inventory.setContents(playerInventory.getItems());
+        			            inventory.setArmourContents(playerInventory.getArmour());
+        			            playerFile.setProperty(inventoryName, inventory.toString());
+        			            
+        			            //Let's load all the other state stuff about the player...
+        			            File fplayerstats = new File(fdir, playername + ".stats");
+        			            if(fplayerstats.exists()) {
+        			            	fIS = new FileInputStream(fplayerstats);
+        			                obIn = new ObjectInputStream(fIS);
+        			                WIPlayerStats playerstats = (WIPlayerStats) obIn.readObject();
+        			                obIn.close();
+        			                fIS.close();
+        			                
+        			                if (MultiInvPlayerData.isHealthSplit) {
+        			                	int health = playerstats.getHealth();
+        			                    if (health <= 0 || health > 20) {
+        			                    	health = 20;
+        			                    }
+        			                    playerFile.setProperty("health", health);
+        			                }
+        			                if(MultiInvPlayerData.isHungerSplit){
+        			                    playerFile.setProperty("hungerSaturation", playerstats.getSaturation());
+        			                    playerFile.setProperty("hungerLevel", playerstats.getFoodLevel());
+        			                    playerFile.setProperty("exhaustion", playerstats.getExhaustion());
+        			                }
+        			                if (MultiInvPlayerData.isExpSplit) {
+        			                    int exp = playerFile.getInt("expLevel", 0);
+        			                    double expgain = playerFile.getInt("otherExp", 0);
+        			                    playerFile.setProperty("expLevel", playerstats.getLevel());
+        			                    playerFile.setProperty("otherExp", playerstats.getExp());
+        			                }
+        			            }
+
+        			            // Save gameMode
+        			            int creativeGroup = 0;
+        			            if (MultiInv.creativeGroups.contains(fdir.getName())){
+        			                creativeGroup = 1;
+        			            }
+        			            playerFile.setProperty("gameMode", playerFile.getInt("gameMode", creativeGroup));
+
+        			            playerFile.save();
+        			        }
+        			        catch (FileNotFoundException e)
+        			        {
+        			            System.out.println("Uhoh, a file wasn't found");
+        			        }
+        			        catch (Exception e)
+        			        {
+        			        	
+        			        }
+        				}
+        			}
+        		}
+        	}
+    	}
+	}
+
+	/* Below here are the actual commands called that perform the required action */
     private void deleteCommand(CommandSender sender, String[] split) {
         int invs = plugin.deletePlayerInventories(split[1]);
         if (invs != 0) {

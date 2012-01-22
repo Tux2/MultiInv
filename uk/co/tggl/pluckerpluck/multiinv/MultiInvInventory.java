@@ -177,7 +177,7 @@ public class MultiInvInventory implements Serializable {
         return pluginName;
     }
 
-    private void setContents(ItemStack[] itemstacks) {
+    void setContents(ItemStack[] itemstacks) {
         storedInventory[0] = itemStackToObject(itemstacks);
     }
 
@@ -188,7 +188,7 @@ public class MultiInvInventory implements Serializable {
         return null;
     }
 
-    private void setArmourContents(ItemStack[] itemstacks) {
+    void setArmourContents(ItemStack[] itemstacks) {
         storedInventory[1] = itemStackToObject(itemstacks);
     }
 

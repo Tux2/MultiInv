@@ -13,9 +13,9 @@ import java.util.HashMap;
 public class MultiInvPlayerData {
 
     public static ArrayList<String> existingPlayers = new ArrayList<String>();
-    private static boolean isHealthSplit;
-    private static boolean isHungerSplit;
-    private static boolean isExpSplit;
+    static boolean isHealthSplit;
+    static boolean isHungerSplit;
+    static boolean isExpSplit;
     static boolean restoreGameModes;
 
 
